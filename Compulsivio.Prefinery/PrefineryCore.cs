@@ -111,8 +111,8 @@ namespace Compulsivio.Prefinery
                             }
                         }
                     }
-
                     break;
+
                 case GetTesterState.InProfile:
                     if (reader.NodeType == XmlNodeType.EndElement && reader.Name.ToLower() == "profile")
                     {
@@ -128,7 +128,9 @@ namespace Compulsivio.Prefinery
                     break;
                 }
             }
+            throw new PrefineryException("should never get here");
         }
+
         private IEnumerable<Tester> ProcessTesterRequest(HttpWebRequest request)
         {
             // get our response

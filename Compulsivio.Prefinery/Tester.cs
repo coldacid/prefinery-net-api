@@ -7,7 +7,7 @@ namespace Compulsivio.Prefinery
 {
     public class Tester
     {
-        internal Prefinery Repository { get; set; }
+        internal PrefineryCore Repository { get; set; }
 
         public int? Id { get; set; }
         public string Email { get; set; }
