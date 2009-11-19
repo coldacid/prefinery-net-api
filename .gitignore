@@ -1,2 +1,7 @@
 
 *.suo
+*.csproj.user
+StyleCop.Cache
+bin/
+obj/
+
