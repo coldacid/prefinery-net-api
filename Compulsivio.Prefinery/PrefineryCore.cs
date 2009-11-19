@@ -285,6 +285,8 @@ namespace Compulsivio.Prefinery
         /// Remove a tester from its associated beta.
         /// </summary>
         /// <param name="id">Id number of the tester to remove.</param>
+        /// <exception cref="T:System.Net.WebException">Something went wrong while communicating with Prefinery.</exception>
+        /// <exception cref="T:Compulsivio.Prefinery.PrefineryException">Prefinery returned an error.</exception>
         public void DeleteTester(int id)
         {
             // build our request
@@ -293,8 +295,32 @@ namespace Compulsivio.Prefinery
                 as HttpWebRequest;
             request.Method = "DELETE";
 
-            // TODO: actually execute the request
-            throw new NotImplementedException();
+            HttpWebResponse response = null;
+            try
+            {
+                response = request.GetResponse() as HttpWebResponse;
+            }
+            catch (WebException e)
+            {
+                if (e.Status == WebExceptionStatus.ProtocolError && (e.Response as HttpWebResponse).StatusCode < HttpStatusCode.InternalServerError)
+                {
+                    response = e.Response as HttpWebResponse;
+                }
+                else
+                {
+                    throw e;
+                }
+            }
+
+            // HTTP 200 means we're good; anything else means errors
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return;
+            }
+            else
+            {
+                throw new PrefineryException(response.StatusDescription);
+            }
         }
 
         /// <summary>
@@ -394,8 +420,15 @@ namespace Compulsivio.Prefinery
                 }
             }
 
-            // TODO: check that things went well
-            throw new NotImplementedException();
+            // HTTP 200 means we're good; anything else means errors
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return;
+            }
+            else
+            {
+                throw new PrefineryException(response.StatusDescription);
+            }
         }
 
         /// <summary>
@@ -447,8 +480,15 @@ namespace Compulsivio.Prefinery
                 }
             }
 
-            // TODO: check that things went well
-            throw new NotImplementedException();
+            // HTTP 200 means we're good; anything else means errors
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return;
+            }
+            else
+            {
+                throw new PrefineryException(response.StatusDescription);
+            }
         }
 
         /// <summary>
