@@ -21,21 +21,12 @@ namespace Compulsivio.Prefinery.Configuration
         }
 
         /// <summary>
-        /// Gets the account/beta name as it appears in the Prefinery API calls.
+        /// Gets the user-set beta name.
         /// </summary>
-        [ConfigurationProperty("name", IsRequired = true)]
+        [ConfigurationProperty("name", IsRequired = false)]
         public string Name
         {
             get { return this["name"] as string; }
-        }
-
-        /// <summary>
-        /// Gets the API key for your Prefinery account.
-        /// </summary>
-        [ConfigurationProperty("apiKey", IsRequired = true)]
-        public string ApiKey
-        {
-            get { return this["apiKey"] as string; }
         }
 
         /// <summary>

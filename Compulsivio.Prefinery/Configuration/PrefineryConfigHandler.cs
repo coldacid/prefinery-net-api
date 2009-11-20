@@ -12,12 +12,19 @@ namespace Compulsivio.Prefinery.Configuration
     public class PrefineryConfigHandler : ConfigurationSection
     {
         /// <summary>
-        /// The &lt;beta&gt; element in the application config file.
+        /// The &lt;account&gt; element in the application config file.
         /// </summary>
-        [ConfigurationProperty("beta", IsRequired = true)]
-        public BetaElement Beta
+        [ConfigurationProperty("account", IsRequired = true)]
+        public AccountElement Account
         {
-            get { return (BetaElement)this["beta"]; }
+            get { return (AccountElement)this["account"]; }
+        }
+
+        [ConfigurationProperty("betas")]
+        [ConfigurationCollection(typeof(BetaCollection), AddItemName = "beta")]
+        public BetaCollection Betas
+        {
+            get { return ((BetaCollection)(this["betas"])); }
         }
     }
 }

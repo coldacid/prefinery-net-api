@@ -32,7 +32,7 @@ namespace Compulsivio.Prefinery
     /// <summary>
     /// A tester to be managed by Prefinery.
     /// </summary>
-    public class Tester
+    public class Tester : ITester
     {
         /// <summary>
         /// Initializes a new instance of the Tester class.
@@ -75,12 +75,12 @@ namespace Compulsivio.Prefinery
         /// <summary>
         /// Gets profile fields associated with the tester.
         /// </summary>
-        public Dictionary<string, string> Profile { get; private set; }
+        public IDictionary<string, string> Profile { get; private set; }
 
         /// <summary>
-        /// Gets or sets the beta to which the tester is attached.
+        /// Gets the beta to which the tester is associated.
         /// </summary>
-        internal PrefineryCore Beta { get; set; }
+        public IBeta Beta { get; internal set; }
 
         /// <summary>
         /// Send changes to the tester to Prefinery.
@@ -118,7 +118,7 @@ namespace Compulsivio.Prefinery
         /// <exception cref="T:System.ArgumentNullException">No invite code is provided.</exception>
         /// <exception cref="T:System.InvalidOperationException">The tester is not associated with any Prefinery betas.</exception>
         /// <exception cref="T:System.InvalidOperationException">The tester does not have an ID number associated with it.</exception>
-        public bool IsValidInviteCode(string inviteCode)
+        public bool ValidateCode(string inviteCode)
         {
             if (this.Beta == null)
             {
@@ -135,7 +135,7 @@ namespace Compulsivio.Prefinery
                 throw new ArgumentNullException("inviteCode");
             }
 
-            return this.Beta.ValidateCode(this, inviteCode);
+            return this.Beta.ValidateTesterCode(this, inviteCode);
         }
 
         /// <summary>
