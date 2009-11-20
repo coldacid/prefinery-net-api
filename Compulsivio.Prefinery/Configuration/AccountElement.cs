@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
-using System.Configuration;
 
 namespace Compulsivio.Prefinery.Configuration
 {
+    /// <summary>
+    /// &lt;account&gt; element from application config file.
+    /// </summary>
     public class AccountElement : ConfigurationElement
     {
         /// <summary>

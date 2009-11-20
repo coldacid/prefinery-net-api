@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Xml;
-using System.Net;
 
 namespace Compulsivio.Prefinery
 {
+    /// <summary>
+    /// Helper class for converting XML results from Prefinery into Tester objects.
+    /// </summary>
     internal static class TesterBuilder
     {
         /// <summary>
@@ -27,6 +30,7 @@ namespace Compulsivio.Prefinery
         /// <summary>
         /// Creates a <see cref="T:Compulsivio.Prefinery.Tester"/> from a <see cref="T:System.Xml.XmlTextReader"/>.
         /// </summary>
+        /// <param name="beta">The beta object associated with the returned testers.</param>
         /// <param name="reader">The <see cref="T:System.Xml.XmlTextReader"/> to read.</param>
         /// <returns>A <see cref="T:Compulsivio.Prefinery.Tester"/> constructed from values in <paramref name="reader"/>.</returns>
         /// <exception cref="T:Compulsivio.Prefinery.PrefineryException">Unexpected XML from <paramref name="reader"/>.</exception>
@@ -140,6 +144,7 @@ namespace Compulsivio.Prefinery
         /// Execute a given <see cref="T:System.Net.HttpWebRequest"/> and produce a list of <see cref="T:Compulsivio.Prefinery.Tester"/>s
         /// from the response.
         /// </summary>
+        /// <param name="beta">The beta object associated with the returned testers.</param>
         /// <param name="request">The <see cref="T:System.Net.HttpWebRequest"/> to execute.</param>
         /// <returns>Enumerable list of <see cref="T:Compulsivio.Prefinery.Tester"/>s returned by Prefinery.</returns>
         /// <exception cref="T:System.Net.WebException">Something went wrong during the HTTP request.</exception>

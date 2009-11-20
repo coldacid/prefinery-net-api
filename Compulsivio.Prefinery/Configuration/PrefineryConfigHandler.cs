@@ -12,7 +12,7 @@ namespace Compulsivio.Prefinery.Configuration
     public class PrefineryConfigHandler : ConfigurationSection
     {
         /// <summary>
-        /// The &lt;account&gt; element in the application config file.
+        /// Gets the object representing the &lt;account&gt; element in the application config file.
         /// </summary>
         [ConfigurationProperty("account", IsRequired = true)]
         public AccountElement Account
@@ -20,11 +20,14 @@ namespace Compulsivio.Prefinery.Configuration
             get { return (AccountElement)this["account"]; }
         }
 
+        /// <summary>
+        /// Gets the object representing the &lt;betas&gt; element in the application config file.
+        /// </summary>
         [ConfigurationProperty("betas")]
         [ConfigurationCollection(typeof(BetaCollection), AddItemName = "beta")]
         public BetaCollection Betas
         {
-            get { return ((BetaCollection)(this["betas"])); }
+            get { return (BetaCollection)this["betas"]; }
         }
     }
 }

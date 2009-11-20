@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web;
 using System.Xml;
 using Compulsivio.Prefinery.Configuration;
-using System.Configuration;
 
 namespace Compulsivio.Prefinery
 {
@@ -61,20 +61,42 @@ namespace Compulsivio.Prefinery
         /// </summary>
         public string ApiKey { get; private set; }
 
+        /// <summary>
+        /// Gets or sets a list of betas associated with the Prefinery account.
+        /// </summary>
         private List<Beta> Betas { get; set; }
 
         #region IBetaRepository Members
 
+        /// <summary>
+        /// Finds a beta with a specified identification number.
+        /// </summary>
+        /// <param name="id">The identification number of the beta to return.</param>
+        /// <returns>A <see cref="T:Compulsivio.Prefinery.IBeta"/> representing the beta.</returns>
         public IBeta GetBeta(int id)
         {
             return this.Betas.FirstOrDefault(b => b.Id == id);
         }
 
+        /// <summary>
+        /// Finds a beta with a specified name.
+        /// </summary>
+        /// <param name="name">The name of the beta to return.</param>
+        /// <returns>A <see cref="T:Compulsivio.Prefinery.IBeta"/> representing the beta.</returns>
+        /// <remarks>
+        /// This is the name given to the beta in the application configuration file, or set when
+        /// creating a beta in code. This is <strong>not</strong> the name by which the beta is
+        /// known to Prefinery.
+        /// </remarks>
         public IBeta GetBeta(string name)
         {
             return this.Betas.FirstOrDefault(b => b.Name == name);
         }
 
+        /// <summary>
+        /// Gets all betas managed by the repository.
+        /// </summary>
+        /// <returns>An enumerable list of <see cref="T:Compulsivio.Prefinery.IBeta"/> objects.</returns>
         public IEnumerable<IBeta> GetBetas()
         {
             foreach (var b in this.Betas)
@@ -85,6 +107,10 @@ namespace Compulsivio.Prefinery
             yield break;
         }
 
+        /// <summary>
+        /// Adds a beta to the repository for managing.
+        /// </summary>
+        /// <param name="beta">A <see cref="T:Compulsivio.Prefinery.IBeta"/> for the repository to manage.</param>
         public void AddBeta(IBeta beta)
         {
             var betaObj = beta as Beta;
@@ -104,6 +130,7 @@ namespace Compulsivio.Prefinery
         /// <summary>
         /// Return the <see cref="T:Compulsivio.Prefinery.Tester"/> with a given ID number.
         /// </summary>
+        /// <param name="beta">The beta object associated with the returned testers.</param>
         /// <param name="id">The ID number of the tester to return.</param>
         /// <returns>A <see cref="T:Compulsivio.Prefinery.Tester"/> with the given ID number.</returns>
         internal Tester GetTester(IBeta beta, int id)
@@ -121,6 +148,7 @@ namespace Compulsivio.Prefinery
         /// <summary>
         /// Return the <see cref="T:Compulsivio.Prefinery.Tester"/> with a given e-mail address.
         /// </summary>
+        /// <param name="beta">The beta object associated with the returned testers.</param>
         /// <param name="email">The e-mail address associated with the tester.</param>
         /// <returns>A <see cref="T:Compulsivio.Prefinery.Tester"/> with the given e-mail address.</returns>
         internal Tester GetTester(IBeta beta, string email)
@@ -138,6 +166,7 @@ namespace Compulsivio.Prefinery
         /// <summary>
         /// Request a list of all testers associated with a beta.
         /// </summary>
+        /// <param name="beta">The beta object associated with the returned testers.</param>
         /// <returns>An enumerable list of <see cref="T:Compulsivio.Prefinery.Tester"/>s.</returns>
         internal IEnumerable<Tester> GetTesters(IBeta beta)
         {
@@ -154,11 +183,12 @@ namespace Compulsivio.Prefinery
         /// <summary>
         /// Add a tester to Prefinery.
         /// </summary>
+        /// <param name="beta">The beta object associated with the returned testers.</param>
         /// <param name="tester">The <see cref="T:Compulsivio.Prefinery.Tester"/> to add.</param>
         /// <exception cref="T:System.InvalidOperationException"><paramref name="tester"/> has already been added.</exception>
         /// <exception cref="T:System.ArgumentException"><paramref name="tester"/> is missing an email address.</exception>
         /// <exception cref="T:System.ArgumentException"><paramref name="tester"/> cannot be added with an initial status of Rejected.</exception>
-        public void AddTester(IBeta beta, ITester tester)
+        internal void AddTester(IBeta beta, ITester tester)
         {
             // make sure we're doing the right thing
             if (tester.Beta != null)
@@ -346,9 +376,11 @@ namespace Compulsivio.Prefinery
         {
             // build our request
             var request = WebRequest.Create(
-                string.Format("http://{0}.prefinery.com/api/v1/betas/{1}/testers/{3}/verify.xml?api_key={2}&invite_code={4}",
-                    this.AccountName, tester.Beta.Id, this.ApiKey, tester.Id, inviteCode))
-                as HttpWebRequest;
+                string.Format(
+                    "http://{0}.prefinery.com/api/v1/betas/{1}/testers/{3}/verify.xml?api_key={2}&invite_code={4}",
+                    new object[] { this.AccountName, tester.Beta.Id, this.ApiKey, tester.Id, inviteCode }
+                )
+            ) as HttpWebRequest;
             request.Method = "GET";
 
             // get our response
@@ -392,9 +424,11 @@ namespace Compulsivio.Prefinery
             if (tester.Id.HasValue)
             {
                 request = WebRequest.Create(
-                    string.Format("http://{0}.prefinery.com/api/v1/betas/{1}/testers/{3}/checkin.xml?api_key={2}",
-                        this.AccountName, tester.Beta.Id, this.ApiKey, tester.Id))
-                    as HttpWebRequest;
+                    string.Format(
+                        "http://{0}.prefinery.com/api/v1/betas/{1}/testers/{3}/checkin.xml?api_key={2}",
+                        new object[] { this.AccountName, tester.Beta.Id, this.ApiKey, tester.Id }
+                    )
+                ) as HttpWebRequest;
             }
             else if (!string.IsNullOrEmpty(tester.Email))
             {

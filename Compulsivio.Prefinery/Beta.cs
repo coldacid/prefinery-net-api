@@ -5,42 +5,79 @@ using System.Text;
 
 namespace Compulsivio.Prefinery
 {
+    /// <summary>
+    /// A beta whose testers are managed by Prefinery.
+    /// </summary>
     public class Beta : IBeta
     {
         #region IBeta Members
 
+        /// <summary>
+        /// Gets the identification number of the beta.
+        /// </summary>
         public int Id { get; internal set; }
 
+        /// <summary>
+        /// Gets or sets a user-identifiable name for the beta.
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Gets the decode key for comparing e-mails and invite codes.
+        /// </summary>
         public string DecodeKey { get; internal set; }
 
+        /// <summary>
+        /// Gets or sets the backing store for the beta.
+        /// </summary>
         internal PrefineryCore Repository { get; set; }
 
         #endregion
 
         #region ITesterRepository Members
 
+        /// <summary>
+        /// Find a tester in this beta with a given id.
+        /// </summary>
+        /// <param name="id">The identification number of the tester.</param>
+        /// <returns>An <see cref="T:Compulsivio.Prefinery.ITester"/> representing the tester.</returns>
         public ITester GetTester(int id)
         {
             return this.Repository.GetTester(this, id);
         }
 
+        /// <summary>
+        /// Find a tester in this beta with a given e-mail address.
+        /// </summary>
+        /// <param name="email">The e-mail address of the tester.</param>
+        /// <returns>An <see cref="T:Compulsivio.Prefinery.ITester"/> representing the tester.</returns>
         public ITester GetTester(string email)
         {
             return this.Repository.GetTester(this, email);
         }
 
+        /// <summary>
+        /// Get a list of all testers in this beta.
+        /// </summary>
+        /// <returns>An enumerable list of testers.</returns>
         public IEnumerable<ITester> GetTesters()
         {
             return this.Repository.GetTesters(this) as IEnumerable<ITester>;
         }
 
+        /// <summary>
+        /// Add a tester to this beta.
+        /// </summary>
+        /// <param name="tester">The <see cref="T:Compulsivio.Prefinery.ITester"/> representing the tester.</param>
         public void AddTester(ITester tester)
         {
             this.Repository.AddTester(this, tester);
         }
 
+        /// <summary>
+        /// Send changes to an existing tester to Prefinery.
+        /// </summary>
+        /// <param name="tester">The <see cref="T:Compulsivio.Prefinery.ITester"/> representing the tester.</param>
         public void UpdateTester(ITester tester)
         {
             if (tester.Beta != this)
@@ -51,6 +88,10 @@ namespace Compulsivio.Prefinery
             this.Repository.UpdateTester(tester);
         }
 
+        /// <summary>
+        /// Remove a tester from this beta.
+        /// </summary>
+        /// <param name="tester">The <see cref="T:Compulsivio.Prefinery.ITester"/> representing the tester.</param>
         public void DeleteTester(ITester tester)
         {
             if (tester.Beta != this)
@@ -59,26 +100,6 @@ namespace Compulsivio.Prefinery
             }
 
             this.Repository.DeleteTester(tester);
-        }
-
-        public bool ValidateTesterCode(ITester tester, string code)
-        {
-            if (tester.Beta != this)
-            {
-                throw new ArgumentException("Tester not associated with this beta");
-            }
-
-            return this.Repository.ValidateTesterCode(tester, code);
-        }
-
-        public void CheckinTester(ITester tester)
-        {
-            if (tester.Beta != this)
-            {
-                throw new ArgumentException("Tester not associated with this beta");
-            }
-
-            this.Repository.CheckinTester(tester);
         }
 
         #endregion
@@ -131,6 +152,5 @@ namespace Compulsivio.Prefinery
 
             return rightCode.ToString();
         }
-
     }
 }

@@ -35,6 +35,11 @@ namespace Compulsivio.Prefinery
     public class Tester : ITester
     {
         /// <summary>
+        /// Backing field for <see cref="M:Beta"/>.
+        /// </summary>
+        private Beta _beta;
+
+        /// <summary>
         /// Initializes a new instance of the Tester class.
         /// </summary>
         public Tester()
@@ -80,7 +85,30 @@ namespace Compulsivio.Prefinery
         /// <summary>
         /// Gets the beta to which the tester is associated.
         /// </summary>
-        public IBeta Beta { get; internal set; }
+        public IBeta Beta
+        {
+            get
+            {
+                return this._beta;
+            }
+
+            internal set
+            {
+                var beta = value as Beta;
+                if (beta == null)
+                {
+                    throw new ArgumentException("Incompatable IBeta implementation");
+                }
+
+                this._beta = beta;
+                this.Repository = beta.Repository;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the backing store for this tester.
+        /// </summary>
+        internal PrefineryCore Repository { get; set; }
 
         /// <summary>
         /// Send changes to the tester to Prefinery.
@@ -135,7 +163,7 @@ namespace Compulsivio.Prefinery
                 throw new ArgumentNullException("inviteCode");
             }
 
-            return this.Beta.ValidateTesterCode(this, inviteCode);
+            return this.Repository.ValidateTesterCode(this, inviteCode);
         }
 
         /// <summary>
@@ -149,7 +177,7 @@ namespace Compulsivio.Prefinery
                 throw new InvalidOperationException("This tester not associated with a beta");
             }
 
-            this.Beta.CheckinTester(this);
+            this.Repository.CheckinTester(this);
         }
     }
 }
