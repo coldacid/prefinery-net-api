@@ -10,6 +10,29 @@ namespace Compulsivio.Prefinery
     /// </summary>
     public class Beta : IBeta
     {
+        internal Beta()
+        {
+        }
+
+        internal Beta(PrefineryCore repository)
+            : this()
+        {
+            this.Repository = repository;
+        }
+
+        public Beta(int id, string decodeKey)
+            : this(id, "", decodeKey)
+        {
+        }
+
+        public Beta(int id, string name, string decodeKey)
+            : this()
+        {
+            this.Id = id;
+            this.Name = name;
+            this.DecodeKey = decodeKey;
+        }
+
         #region IBeta Members
 
         /// <summary>
