@@ -23,7 +23,7 @@ namespace Compulsivio.Prefinery.Configuration
         /// <summary>
         /// Gets the object representing the &lt;betas&gt; element in the application config file.
         /// </summary>
-        [ConfigurationProperty("betas")]
+        [ConfigurationProperty("betas", IsRequired = true)]
         [ConfigurationCollection(typeof(BetaCollection), AddItemName = "beta")]
         public BetaCollection Betas
         {
