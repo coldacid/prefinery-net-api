@@ -441,7 +441,7 @@ namespace Compulsivio.Prefinery
                 throw new ArgumentException("Tester needs either an Id or email address to be checked in");
             }
 
-            request.Method = "GET";
+            request.Method = "POST";
 
             // get our response
             HttpWebResponse response = null;
