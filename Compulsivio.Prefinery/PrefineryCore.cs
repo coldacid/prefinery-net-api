@@ -25,7 +25,7 @@ namespace Compulsivio.Prefinery
         /// </remarks>
         public PrefineryCore()
         {
-            PrefineryConfigHandler config = (PrefineryConfigHandler)ConfigurationManager.GetSection("Prefinery");
+            PrefineryConfigHandler config = (PrefineryConfigHandler)ConfigurationManager.GetSection("prefinery");
 
             this.AccountName = config.Account.AccountName;
             this.ApiKey = config.Account.ApiKey;
